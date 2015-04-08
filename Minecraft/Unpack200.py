@@ -41,29 +41,28 @@ class Unpack200(Processor):
 	__doc__ = description
 
 	def unpack_the_file(self):
-		file = self.env.get("file_path")
-		if not file:
-			raise ProcessorError("file_path not found: %s" % (file))
-		destination = self.env.get("destination")
-		if not destination:
-			raise ProcessorError("destination not found: %s" % (destination))
 		cmd = ['/usr/libexec/java_home']
 		proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		(output, errors) = proc.communicate()
-		self.output("Return code: %s" % proc.returncode)
 		if proc.returncode:
 			raise ProcessorError("Java is not installed, can't use unpack200. Error: %s" % errors)
-		cmd = ['/usr/bin/unpack200',file,destination]
+		cmd = ['/usr/bin/unpack200',self.env["file_path"],self.env["destination"]]
 		proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		(output, errors) = proc.communicate()
 		return output      
 
 	def main(self):
 		'''Does nothing except decompresses the file'''
+		# Check for infile path
 		if not "file_path" in self.env:
 			raise ProcessorError("No file path specified!")
 		if not os.path.isfile(self.env["file_path"]):
 			raise ProcessorError("Invalid file path specified.")
+		# Check for outfile path
+		if not "destination" in self.env:
+			raise ProcessorError("No destination path specified!")
+#		if os.path.isfile(self.env["destination_path"]):
+#			raise ProcessorError("Invalid file path specified.")
 		self.output("Using input .pack file %s to extract to %s" % (self.env["file_path"], self.env["destination"]))
 		self.env["results"] = self.unpack_the_file()
 		self.output("Unpacked %s" % self.env["results"])
