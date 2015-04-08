@@ -73,10 +73,10 @@ class LZMADecompress(Processor):
 			"required": True,
 			"description": "Path to .lzma file.",
 		},
-		"decompressed_file": {
+		"decompressed_path": {
 			"required": False,
 			"description": ("Path to output decompressed file.  Defaults to",
-							"%RECIPE_CACHE_DIR% with filename of input file.",
+							"%RECIPE_CACHE_DIR% with filename of input file, minus extension.",
 							"If file exists, it will be overwritten."),
 		}
 	}
@@ -169,8 +169,8 @@ class LZMADecompress(Processor):
 		if not os.path.isfile(self.env["lzma_file"]):
 			raise ProcessorError("No valid LZMA file at path %s" % self.env["lzma_file"])
 		self.output("Using input LZMA file %s" % self.env["lzma_file"])
-		if "decompressed_file" in self.env:
-			output_file = self.env["decompressed_file"]
+		if "decompressed_path" in self.env:
+			output_file = self.env["decompressed_path"]
 		else:
 			output_file = os.path.join(self.env.get('RECIPE_CACHE_DIR'), os.path.splitext(os.path.basename(self.env["lzma_file"]))[0])
 		# if the file already exists, delete it.
