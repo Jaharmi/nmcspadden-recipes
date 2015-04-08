@@ -16,4 +16,5 @@ then
 	#c - calculate checksum of each file to determine if it's changed
 else
 	echo "Didn't find MinecraftEDU in /Library/Application Support/."
+	exit 1
 fi

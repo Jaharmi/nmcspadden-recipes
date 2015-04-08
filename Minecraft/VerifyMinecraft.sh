@@ -15,4 +15,5 @@ if [[ -e "$mcpath" ]]; then
 	chown -R $USER:staff "$endpath"
 else
 	echo "Didn't find Minecraft in /Library/Application Support/."
+	exit 1
 fi
