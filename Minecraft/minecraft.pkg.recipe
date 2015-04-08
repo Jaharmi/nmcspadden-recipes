@@ -3,7 +3,7 @@
 <plist version="1.0">
 <dict>
     <key>Description</key>
-    <string>Packages up Minecraft for deployment.  THIS RECIPE REQUIRES JAVA TO BE INSTALLED IN ORDER TO RUN.</string>
+    <string>Packages up Minecraft for deployment.  Minecraft's support files are installed into /Library/Application Support/minecraft, and a launchagent is installed that rsyncs into ~/Library/Application Support/minecraft on login. THIS RECIPE REQUIRES JAVA TO BE INSTALLED IN ORDER TO RUN.</string>
     <key>Identifier</key>
     <string>com.github.nmcspadden.pkg.minecraft</string>
     <key>Input</key>
@@ -172,7 +172,7 @@
                     <key>pkgdir</key>
                     <string>%RECIPE_CACHE_DIR%/</string>
                     <key>id</key>
-                    <string>org.sacredsf.pkg.minecraft</string>
+                    <string>com.github.autopkg.nmcspadden-recipes.minecraft</string>
                     <key>infofile</key>
                     <string>%RECIPE_CACHE_DIR%/PackageInfo</string>
                     <key>options</key>
