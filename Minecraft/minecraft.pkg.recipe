@@ -26,6 +26,8 @@
     		<dict>
     			<key>lzma_file</key>
     			<string>%RECIPE_CACHE_DIR%/downloads/launcher.pack.lzma</string>
+    			<key>decompressed_path</key>
+    			<string>%RECIPE_CACHE_DIR%/downloads/launcher.pack</string>
     		</dict>
         </dict>
 		<dict>
