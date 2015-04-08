@@ -14,6 +14,7 @@ then
 	#t - preserve modification dates
 	#u - update the folder, don't copy unchanged files
 	#c - calculate checksum of each file to determine if it's changed
+	chown -R $USER:staff "$endpath"
 else
 	echo "Didn't find MinecraftEDU in /Library/Application Support/."
 	exit 1

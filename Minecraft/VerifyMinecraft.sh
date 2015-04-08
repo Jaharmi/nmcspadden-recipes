@@ -2,11 +2,13 @@
 
 #VerifyMinecraft
 
-mcpath="/Library/Application Support/minecraft"
+mcpath="/Library/Application Support/minecraft/"
 homepath="$HOME/Library/Application Support/"
 endpath="$HOME/Library/Application Support/minecraft/"
+#the rsync command below will not behave as expected if the trailing slashes are missing!
 
-if [[ -e "$mcpath" ]]; then
+if [[ -e "$mcpath" ]]
+then
 	/usr/bin/rsync -rtuc "$mcpath" "$endpath"
 	#r - recursive
 	#t - preserve modification dates
