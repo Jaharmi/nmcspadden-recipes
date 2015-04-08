@@ -18,6 +18,7 @@
 # I will eventually fix it to make it much more robust, but it's more of a "get-it-done" kind of solution.
 
 import subprocess
+import os.path
 from autopkglib import Processor, ProcessorError
 
 __all__ = ["Unpack200"]
@@ -46,6 +47,12 @@ class Unpack200(Processor):
 		destination = self.env.get("destination")
 		if not destination:
 			raise ProcessorError("destination not found: %s" % (destination))
+		cmd = ['/usr/libexec/java_home']
+		proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+		(output, errors) = proc.communicate()
+		self.output("Return code: %s" % proc.returncode)
+		if proc.returncode:
+			raise ProcessorError("Java is not installed, can't use unpack200. Error: %s" % errors)
 		cmd = ['/usr/bin/unpack200',file,destination]
 		proc = subprocess.Popen(cmd, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
 		(output, errors) = proc.communicate()
@@ -53,10 +60,13 @@ class Unpack200(Processor):
 
 	def main(self):
 		'''Does nothing except decompresses the file'''
-		if "file_path" in self.env:
-			self.output("Using input .pack file %s to extract to %s" % (self.env["file_path"], self.env["destination"]))
+		if not "file_path" in self.env:
+			raise ProcessorError("No file path specified!")
+		if not os.path.isfile(self.env["file_path"]):
+			raise ProcessorError("Invalid file path specified.")
+		self.output("Using input .pack file %s to extract to %s" % (self.env["file_path"], self.env["destination"]))
 		self.env["results"] = self.unpack_the_file()
-		self.output("Unpacked: %s" % self.env["results"])
+		self.output("Unpacked %s" % self.env["results"])
 
 
 if __name__ == '__main__':
