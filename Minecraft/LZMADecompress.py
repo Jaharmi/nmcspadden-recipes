@@ -25,26 +25,26 @@ import sys
 from ctypes import CDLL, Structure, c_void_p, c_size_t, c_uint, c_uint32, c_uint64, create_string_buffer, addressof, sizeof, byref
 
 class lzma_stream(Structure):
-	_fields_ = [
-		("next_in",        c_void_p),
-		("avail_in",       c_size_t),
-		("total_in",       c_uint64),
-		("next_out",       c_void_p),
-		("avail_out",      c_size_t),
-		("total_out",      c_uint64),
-		("allocator",      c_void_p),
-		("internal",       c_void_p),
-		("reserved_ptr1",  c_void_p),
-		("reserved_ptr2",  c_void_p),
-		("reserved_ptr3",  c_void_p),
-		("reserved_ptr4",  c_void_p),
-		("reserved_int1",  c_uint64),
-		("reserved_int2",  c_uint64),
-		("reserved_int3",  c_size_t),
-		("reserved_int4",  c_size_t),
-		("reserved_enum1", c_uint),
-		("reserved_enum2", c_uint),
-	]
+    _fields_ = [
+        ("next_in",        c_void_p),
+        ("avail_in",       c_size_t),
+        ("total_in",       c_uint64),
+        ("next_out",       c_void_p),
+        ("avail_out",      c_size_t),
+        ("total_out",      c_uint64),
+        ("allocator",      c_void_p),
+        ("internal",       c_void_p),
+        ("reserved_ptr1",  c_void_p),
+        ("reserved_ptr2",  c_void_p),
+        ("reserved_ptr3",  c_void_p),
+        ("reserved_ptr4",  c_void_p),
+        ("reserved_int1",  c_uint64),
+        ("reserved_int2",  c_uint64),
+        ("reserved_int3",  c_size_t),
+        ("reserved_int4",  c_size_t),
+        ("reserved_enum1", c_uint),
+        ("reserved_enum2", c_uint),
+    ]
 
 # Hardcoded this path to the System liblzma dylib location, so that /usr/local/lib or other user
 # installed library locations aren't used (which ctypes.util.find_library(...) would hit).
@@ -90,7 +90,7 @@ class LZMADecompress(Processor):
 		strm = lzma_stream(*LZMA_STREAM_INIT)
 	
 		# Initialize a decoder
-		result = c_liblzma.lzma_stream_decoder(byref(strm), UINT64_MAX, LZMA_CONCATENATED)
+		result = c_liblzma.lzma_alone_decoder(byref(strm), UINT64_MAX, 0)
 	
 		# Setup the output buffer
 		outbuf = create_string_buffer(BUFSIZ)
@@ -171,14 +171,15 @@ class LZMADecompress(Processor):
 		self.output("Using input LZMA file %s" % self.env["lzma_file"])
 		if "decompressed_file" in self.env:
 			output_file = self.env["decompressed_file"]
-			# if the file already exists, delete it.
-			if os.path.isfile(self.env["decompressed_file"]):
-				self.output("Decompressed file already exists, deleting: %s" % self.env["decompressed_file"])
-				os.remove(self.env["decompressed_file"])
 		else:
-			output_file = os.path.join(self.env.get('RECIPE_CACHE_DIR'), os.path.basename(self.env["lzma_file"]))
+			output_file = os.path.join(self.env.get('RECIPE_CACHE_DIR'), os.path.splitext(os.path.basename(self.env["lzma_file"]))[0])
+		# if the file already exists, delete it.
+		if os.path.isfile(output_file):
+			self.output("Decompressed file already exists, deleting: %s" % output_file)
+			os.remove(output_file)
+		self.output("Decompressing to %s" % output_file)
 		self.decompress(self.env["lzma_file"], output_file)
-		self.output("Decompressed: %s" % self.env["results"])
+		self.output("Decompressed.")
 
 
 if __name__ == '__main__':
