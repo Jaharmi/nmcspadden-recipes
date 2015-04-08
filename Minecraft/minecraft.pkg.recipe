@@ -123,7 +123,7 @@
         	<key>Arguments</key>
         	<dict>
         		<key>source_path</key>
-        		<string>%RECIPE_DIR%/org.sacredsf.minecraft.plist</string>
+        		<string>%RECIPE_DIR%/com.github.autopkg.nmcspadden-recipes.minecraft.plist</string>
         		<key>destination_path</key>
         		<string>%pkgroot%/Library/LaunchAgents/</string>
         	</dict>
