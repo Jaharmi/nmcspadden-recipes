@@ -132,10 +132,16 @@
                 <string>%pkgroot%</string>
                 <key>installs_item_paths</key>
                 <array>
+                    <string>/Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home/lib/deploy/JavaControlPanel.prefPane</string>
                     <string>/Library/Java/JavaVirtualMachines/jdk%version%.jdk</string>
                 </array>
                 <key>version_comparison_key</key>
-                <string>CFBundleVersion</string>
+                <dict>
+                    <key>/Library/Internet Plug-Ins/JavaAppletPlugin.plugin/Contents/Home/lib/deploy/JavaControlPanel.prefPane</key>
+                    <string>CFBundleShortVersionString</string>
+                    <key>/Library/Java/JavaVirtualMachines/jdk%version%.jdk</key>
+                    <string>CFBundleVersion</string>
+                </dict>
             </dict>
         </dict>
         <dict>
